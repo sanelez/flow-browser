@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { spawnSync } from "node:child_process";
 import * as jju from "jju";
 import { BunLock } from "@/_types/bun-lock";
 import { PackageJson } from "@/_types/package-json";
@@ -37,6 +38,23 @@ export function updatePackageJson(electronVersion: string) {
   });
 
   fs.writeFileSync(packageJsonPath, updatedContent);
+}
+
+/**
+ * Runs `bun install` from the repo root so `bun.lock` matches the updated `package.json`.
+ */
+export function runBunInstall() {
+  const result = spawnSync("bun", ["install"], {
+    cwd: process.cwd(),
+    stdio: "inherit"
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+  if (result.status !== 0) {
+    throw new Error(`bun install failed with exit code ${result.status ?? "unknown"}`);
+  }
 }
 
 /**
