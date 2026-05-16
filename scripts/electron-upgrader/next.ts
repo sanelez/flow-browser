@@ -1,5 +1,6 @@
 import { findLatestNextMajorVersion, getCommitHashForTag } from "./_modules/github";
 import { incrementElectronUpdaterVersionConfiguration, runBunInstall, updatePackageJson } from "./_modules/updater";
+import { runUpdateNodeAbi } from "./update-node-abi";
 
 // GRAB RELEASE FROM GITHUB //
 const latestNextVersion = await findLatestNextMajorVersion();
@@ -21,6 +22,8 @@ console.log(`Commit hash: ${commitHash}`);
 updatePackageJson(latestNextVersion);
 
 console.log("package.json updated!");
+
+await runUpdateNodeAbi();
 
 runBunInstall();
 

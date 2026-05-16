@@ -1,5 +1,6 @@
 import { findLatestCurrentMajorVersion, getCommitHashForTag } from "./_modules/github";
 import { runBunInstall, updatePackageJson } from "./_modules/updater";
+import { runUpdateNodeAbi } from "./update-node-abi";
 
 // GRAB RELEASE FROM GITHUB //
 const latestCurrentVersion = await findLatestCurrentMajorVersion();
@@ -21,6 +22,8 @@ console.log(`Commit hash: ${commitHash}`);
 updatePackageJson(latestCurrentVersion);
 
 console.log("package.json updated!");
+
+await runUpdateNodeAbi();
 
 runBunInstall();
 
